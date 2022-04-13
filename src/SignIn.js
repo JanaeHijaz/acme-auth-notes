@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { signIn } from './store';
+import { signIn, getNotes } from './store';
 
 class SignIn extends React.Component{
   constructor(){
@@ -24,6 +24,8 @@ class SignIn extends React.Component{
         username,
         password
       });
+
+      await this.props.getNotes();
     }
     catch(ex){
       console.log(ex);
@@ -46,8 +48,8 @@ class SignIn extends React.Component{
 
 const mapDispatch = (dispatch)=> {
   return {
-    signIn: (credentials)=> dispatch(signIn(credentials))
-
+    signIn: (credentials)=> dispatch(signIn(credentials)),
+    getNotes: () => dispatch(getNotes())
   };
 };
 

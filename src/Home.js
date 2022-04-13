@@ -4,6 +4,7 @@ import { logout } from './store';
 import { Link } from 'react-router-dom';
 
 const Home = ({ auth, logout, notes})=> {
+  console.log(notes)
   return (
     <div>
       Welcome { auth.username }
