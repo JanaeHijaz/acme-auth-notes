@@ -28,6 +28,13 @@ const logout = ()=> {
   };
 };
 
+/* 
+delete process is returning an error at first, then the thunk is working on the second time -_-
+
+Uncaught Error: Actions must be plain objects. Instead, the actual type was: 'Promise'.
+You may need to add middleware to your store setup to handle dispatching other values, 
+such as 'redux-thunk' to handle dispatching functions.
+*/
 const deleteNote = async(note) => {
   console.log('NOTE HERE!!!!!!!!', note)
   //return async function(dispatch) {
