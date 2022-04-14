@@ -7,6 +7,9 @@ const notes = (state = [], action)=> {
   if(action.type === 'GET_NOTES'){
     return action.notes;
   }
+  if(action.type === 'DELETE_NOTE'){
+    return state.filter(note => note.id !== action.note.id);
+  }
   return state;
 };
 
@@ -23,6 +26,14 @@ const logout = ()=> {
     type: 'SET_AUTH',
     auth: {}
   };
+};
+
+const deleteNote = async(note) => {
+  console.log('NOTE HERE!!!!!!!!', note)
+  //return async function(dispatch) {
+    await axios.delete(`/api/notes/${note.id}`);
+    store.dispatch({ type: 'DELETE_NOTE', note });
+  //}
 };
 
 const getNotes = () => {
@@ -70,6 +81,6 @@ const store = createStore(
   applyMiddleware(thunk, logger)
 );
 
-export { attemptLogin, signIn, logout, getNotes };
+export { attemptLogin, signIn, logout, getNotes, deleteNote };
 
 export default store;
