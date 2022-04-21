@@ -38,8 +38,8 @@ app.get('/api/purchases', async(req, res, next)=> {
 
 app.get('/api/notes', async(req, res, next) => {
   try{
+    //first, identify the user by the headers authorization
     const user = await User.byToken(req.headers.authorization);
-    
     const userNotes = await Note.findAll({
       where: {
         userId: user.id
@@ -52,10 +52,29 @@ app.get('/api/notes', async(req, res, next) => {
   }
 });
 
+app.post('/api/notes', async(req, res, next) => {
+  try{
+    const user = await User.byToken(req.headers.authorization);
+    //console.log(user)
+    res.status(201).send(await Note.create({ ...req.body, userId: user.id })); 
+    // this creates a note for the specific user
+  }
+  catch(ex){
+    next(ex);
+  }
+});
+
 app.delete('/api/notes/:id', async(req, res, next) => {
   try{
-    const note = await Note.findByPk(req.params.id);
-    console.log(note)
+    //const note = await Note.findByPk(req.params.id); // use findOne {where...{}
+    const user = await User.byToken(req.headers.authorization);
+    const note = await Note.findOne({
+      where: {
+        id: req.params.id,
+        userId: user.id
+      }
+    });
+    //console.log(note)
     await note.destroy();
     res.sendStatus(204);
   }

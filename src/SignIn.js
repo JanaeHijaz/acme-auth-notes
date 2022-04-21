@@ -25,7 +25,7 @@ class SignIn extends React.Component{
         password
       });
 
-      await this.props.getNotes();
+      //await this.props.getNotes(); // moved this to App.js
     }
     catch(ex){
       console.log(ex);
@@ -49,7 +49,8 @@ class SignIn extends React.Component{
 const mapDispatch = (dispatch)=> {
   return {
     signIn: (credentials)=> dispatch(signIn(credentials)),
-    getNotes: () => dispatch(getNotes())
+    //getNotes: () => dispatch(getNotes()) // could we have put getNotes here instead of App.js? i’m not sure if it matters where we invoke that. 
+    // moved this to App.js
   };
 };
 

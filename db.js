@@ -16,8 +16,15 @@ const User = conn.define('user', {
   password: STRING
 });
 
+// 1. create Note model 
 const Note = conn.define('note', {
-  txt: STRING
+  txt: {
+    type: STRING,
+    allowNull: false,
+    validate: {
+    notEmpty: true
+    }
+  }
 });
 
 Note.belongsTo(User);
@@ -75,7 +82,7 @@ const syncAndSeed = async()=> {
   ];
   const [lucy, moe, larry] = await Promise.all(
     credentials.map( credential => User.create(credential))
-  );
+  ); // add async/await inside of map to control order (32:00 in vid)
 
   // const notes = [ 
   //   { text: 'hello world' }, 
@@ -88,12 +95,15 @@ const syncAndSeed = async()=> {
   // await lucy.setNotes(note1);
   // await moe.setNotes([note2, note3])
 
-  Note.create({txt: 'Doctors Appt @ 2pm', userId: lucy.id});
-  Note.create({txt: 'Buy Food', userId: lucy.id});
-  Note.create({txt: 'Study Algos', userId: moe.id});
-  Note.create({txt: 'Finish HW', userId: larry.id});
-  Note.create({txt: 'Clean House', userId: moe.id});
-
+  // Use await Promise.all if you don't care about the order of whats created first, etc. 
+  await Promise.all([
+  Note.create({txt: 'Doctors Appt @ 2pm', userId: lucy.id}),
+  Note.create({txt: 'Buy Food', userId: lucy.id}),
+  Note.create({txt: 'Study Algos', userId: moe.id}),  
+  Note.create({txt: 'Clean House', userId: moe.id}),
+  Note.create({txt: 'Finish HW', userId: larry.id}),
+  Note.create({txt: 'Meal Prep', userId: larry.id}),
+  ]);  
 
   return {
     users: {
